@@ -3,20 +3,21 @@ const router = express.Router();
 const statesController = require("../../controllers/statesController");
 
 //TODO: does this need something special here for handling the querystring?
-router.route("/").get(statesController.getAllStates);
+router.route("/").get(statesController.readAllStates);
 
-router.route("/:state").get(statesController.getState);
+//single reads
+router.route("/:state").get(statesController.readState);
+router.route("/:state/capital").get(statesController.readCapital);
+router.route("/:state/nickname").get(statesController.readNickname);
+router.route("/:state/population").get(statesController.readPopulation);
+router.route("/:state/admission").get(statesController.readAdmission);
 
-router.route("/:state/capital").get(statesController.getCapital);
-router.route("/:state/nickname").get(statesController.getNickname);
-router.route("/:state/population").get(statesController.getPopulation);
-router.route("/:state/admission").get(statesController.getAdmission);
-
+//funfact CRUD
 router
   .route("/:state/funfact")
-  .get(funfactsController.read)
-  .post(funfactsController.create)
-  .patch(funfactsController.update)
-  .delete(funfactsController.delete);
+  .get(funfactsController.readFunfact)
+  .post(funfactsController.createFunfact)
+  .patch(funfactsController.updateFunfact)
+  .delete(funfactsController.deleteFunfact);
 
 module.exports = router;
