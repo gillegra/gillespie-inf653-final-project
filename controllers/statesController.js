@@ -1,5 +1,3 @@
-//TODO: update to use DB
-//TODO: merge this data with DB data
 const data = {
   states: require("../models/states.json"),
   setStates: function (data) {
@@ -8,11 +6,11 @@ const data = {
 };
 
 //TODO: add conditions for contig querystring parameter
-const getAllStates = (req, res) => {
+const readAllStates = (req, res) => {
   res.json(data.states);
 };
 
-const getState = (req, res) => {
+const readState = (req, res) => {
   const state = data.states.find((emp) => emp.id === parseInt(req.params.id));
   if (!state) {
     return res
@@ -22,10 +20,18 @@ const getState = (req, res) => {
   res.json(state);
 };
 
+const readCapital = (req, res) => {};
+
+const readNickname = (req, res) => {};
+
+const readPopulation = (req, res) => {};
+
+const readAdmission = (req, res) => {};
+
 module.exports = {
-  getAllStates,
+  readAllStates,
   createNewState,
   updateState,
   deleteState,
-  getState,
+  readState,
 };
