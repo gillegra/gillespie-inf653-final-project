@@ -1,0 +1,33 @@
+{
+  "name": "inf653-grantg-finalproject",
+  "version": "1.0.0",
+  "description": "States be bangin yo!",
+  "main": "server.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "date-fns": "^2.28.0",
+    "dotenv": "^16.0.0",
+    "dotenv-expand": "^8.0.3",
+    "express": "^4.17.3",
+    "mongoose": "^6.3.0",
+    "uuid": "^8.3.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/gillegra/gillespie-inf653-final-project.git"
+  },
+  "author": "Grant Gillespie",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gillegra/gillespie-inf653-final-project/issues"
+  },
+  "homepage": "https://github.com/gillegra/gillespie-inf653-final-project#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
