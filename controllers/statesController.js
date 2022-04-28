@@ -1,13 +1,10 @@
-const data = {
-  states: require("../models/states.json"),
-  setStates: function (data) {
-    this.states = data;
-  },
-};
+const State = require("../models/State");
 
 //TODO: add conditions for contig querystring parameter
-const readAllStates = (req, res) => {
-  res.json(data.states);
+const readAllStates = async (req, res) => {
+  const states = await State.find();
+  if (!states) return res.status(204).json({ message: "No states found." });
+  res.json(states);
 };
 
 const readState = (req, res) => {
@@ -30,8 +27,8 @@ const readAdmission = (req, res) => {};
 
 module.exports = {
   readAllStates,
-  createNewState,
-  updateState,
-  deleteState,
+  // createNewState,
+  // updateState,
+  // deleteState,
   readState,
 };
