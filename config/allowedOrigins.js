@@ -1,5 +1,3 @@
-const allowedOrigins = [
-  'http://localhost',
-];
+const allowedOrigins = ["http://localhost", "https://hoppscotch.io"];
 
 module.exports = allowedOrigins;
