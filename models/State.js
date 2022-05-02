@@ -24,10 +24,8 @@ class State {
     return this.contig === null ? this.states : this.filterContiguous();
   }
 
-  findOne(slug) {
-    return this.states.find((state) => {
-      slug.toUpperCase() ?? "" === state.slug;
-    });
+  findOne() {
+    return this.states.find((state) => this.code === state.code);
   }
 
   filterContiguous() {

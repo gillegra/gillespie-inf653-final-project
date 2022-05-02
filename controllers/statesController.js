@@ -13,12 +13,17 @@ const readAllStates = async (req, res) => {
   res.json(states);
 };
 
-const readState = (req, res) => {
-  const state = data.states.find((emp) => emp.id === parseInt(req.params.id));
+const readState = async (req, res) => {
+  // console.log(req.params.state?.toUpperCase()); //DEBUG
+  State.code = req.params.state?.toUpperCase();
+  const state = await State.findOne();
   if (!state) {
-    return res
-      .status(400)
-      .json({ message: "State ID " + req.body.id + " not found" });
+    return (
+      res
+        .status(400)
+        // .json({ message: "State ID " + req.params.state + " not found" });
+        .json({ message: "Invalid state abbreviation parameter" })
+    );
   }
   res.json(state);
 };
