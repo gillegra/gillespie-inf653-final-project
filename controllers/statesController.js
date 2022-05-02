@@ -1,7 +1,13 @@
 const State = require("../models/State");
 
-//TODO: add conditions for contig querystring parameter
 const readAllStates = async (req, res) => {
+  // console.log(req.query.contig?.toUpperCase()); //DEBUG
+  State.contig =
+    req.query.contig?.toUpperCase() === "TRUE"
+      ? true
+      : req.query.contig?.toUpperCase() === "FALSE"
+      ? false
+      : null;
   const states = await State.find();
   if (!states) return res.status(204).json({ message: "No states found." });
   res.json(states);
@@ -27,8 +33,9 @@ const readAdmission = (req, res) => {};
 
 module.exports = {
   readAllStates,
-  // createNewState,
-  // updateState,
-  // deleteState,
   readState,
+  readCapital,
+  readNickname,
+  readPopulation,
+  readAdmission,
 };

@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const statesController = require("../../controllers/statesController");
 
-//TODO: does this need something special here for handling the querystring?
 router.route("/").get(statesController.readAllStates);
 
 //single reads
