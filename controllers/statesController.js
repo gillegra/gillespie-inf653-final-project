@@ -14,18 +14,7 @@ const readAllStates = async (req, res) => {
 };
 
 const readState = async (req, res) => {
-  // console.log(req.params.state?.toUpperCase()); //DEBUG
-  State.code = req.params.state?.toUpperCase();
-  const state = await State.findOne();
-  if (!state) {
-    return (
-      res
-        .status(400)
-        // .json({ message: "State ID " + req.params.state + " not found" });
-        .json({ message: "Invalid state abbreviation parameter" })
-    );
-  }
-  res.json(state);
+  res.json(req.validatedState);
 };
 
 const readCapital = (req, res) => {};
