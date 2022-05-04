@@ -1,7 +1,7 @@
 const State = require("../models/State");
 
 module.exports = async (req, res, next) => {
-  console.log("Middleware ENGAGED!!!", req.params);
+  console.log("validating state");
   State.code = req.params.state?.toUpperCase();
   const state = await State.findOne();
   if (!state) {

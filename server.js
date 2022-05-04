@@ -6,7 +6,6 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const cors = require("cors");
-const corsOptions = require("./config/corsOptions");
 const { logger } = require("./middleware/logEvents");
 const errorHandler = require("./middleware/errorHandler");
 const mongoose = require("mongoose");
@@ -18,7 +17,7 @@ connectDB();
 
 //middlewares
 app.use(logger);
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
@@ -26,7 +25,9 @@ app.use(express.json());
 app.use("/", express.static(path.join(__dirname, "/public")));
 
 //routes
+console.log("evaluating for / routes");
 app.use("/", require("./routes/root"));
+console.log("evaluating for /states routes");
 app.use("/states", require("./routes/api/states"));
 
 app.all("*", (req, res) => {
