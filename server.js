@@ -25,9 +25,7 @@ app.use(express.json());
 app.use("/", express.static(path.join(__dirname, "/public")));
 
 //routes
-console.log("evaluating for / routes");
 app.use("/", require("./routes/root"));
-console.log("evaluating for /states routes");
 app.use("/states", require("./routes/api/states"));
 
 app.all("*", (req, res) => {

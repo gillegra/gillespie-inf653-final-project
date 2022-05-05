@@ -16,11 +16,11 @@ router.route("/:state/population").get(statesController.readPopulation);
 router.route("/:state/admission").get(statesController.readAdmission);
 
 //funfact CRUD
-// router
-//   .route("/:state/funfact")
-//   .get(funfactsController.readFunfact)
-//   .post(funfactsController.createFunfact)
-//   .patch(funfactsController.updateFunfact)
-//   .delete(funfactsController.deleteFunfact);
+router
+  .route("/:state/funfact")
+  .get(statesController.readFunfact)
+  .post(statesController.createFunfact)
+  .patch(statesController.updateFunfact)
+  .delete(statesController.deleteFunfact);
 
 module.exports = router;

@@ -1,4 +1,5 @@
 const State = require("../models/State");
+const Funfact = require("../models/Funfact");
 
 const readAllStates = async (req, res) => {
   // console.log(req.query.contig?.toUpperCase()); //DEBUG
@@ -55,6 +56,68 @@ const readAdmission = (req, res) => {
   res.json(result);
 };
 
+//funfacts
+
+const readFunfact = async (req, res) => {
+  console.log("readFunFact", req.validatedState.code); //DEBUG
+  const funfact = await Funfact.findOne({
+    code: req.validatedState.code,
+  }).exec();
+  console.log("finished search", funfact, !funfact); //DEBUG
+  if (!funfact) {
+    console.log("empty set", funfact, !funfact); //DEBUG
+    return res
+      .status(204)
+      .json({ message: "No Fun Facts found for " + req.validatedState.name });
+  }
+  res.json({ funfact: funfact });
+};
+
+const createFunfact = async (req, res) => {
+  //validate the input
+  if (
+    !req?.body?.funfacts ||
+    Array.isArray(req.body.funfacts) ||
+    req.body.funfacts.length === 0
+  ) {
+    return res.status(400).json({ message: "State fun facts value required" });
+  }
+
+  let funfact;
+  try {
+    //check if there is already an array of funfacts for this state
+    funfact = await Funfact.findOne({
+      code: req.validatedState.code,
+    }).exec();
+  } catch (err) {
+    console.error(err);
+  }
+
+  if (!funfact) {
+    try {
+      funfact = await Funfact.create({
+        code: req.validatedState.code,
+        funfacts: [req.body.funfacts],
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  try {
+    //update the array you may or may not have created
+    funfact.funfacts = [...funfact.funfacts, ...req.body.funfacts];
+    funfact.save();
+    res.status(201).json(funfact);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const updateFunfact = async (req, res) => {};
+
+const deleteFunfact = async (req, res) => {};
+
 module.exports = {
   readAllStates,
   readState,
@@ -62,4 +125,8 @@ module.exports = {
   readNickname,
   readPopulation,
   readAdmission,
+  readFunfact,
+  createFunfact,
+  updateFunfact,
+  deleteFunfact,
 };
