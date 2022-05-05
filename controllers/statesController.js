@@ -60,35 +60,39 @@ const readAdmission = (req, res) => {
 
 const readFunfact = async (req, res) => {
   console.log("readFunFact", req.validatedState.code); //DEBUG
+  const state = req.validatedState;
   const funfact = await Funfact.findOne({
-    code: req.validatedState.code,
+    code: state.code,
   }).exec();
   console.log("finished search", funfact, !funfact); //DEBUG
   if (!funfact) {
     console.log("empty set", funfact, !funfact); //DEBUG
     return res
       .status(204)
-      .json({ message: "No Fun Facts found for " + req.validatedState.name });
+      .json({ message: "No Fun Facts found for " + state.name });
   }
   res.json({ funfact: funfact });
 };
 
 const createFunfact = async (req, res) => {
   //validate the input
-  if (
-    !req?.body?.funfacts ||
-    Array.isArray(req.body.funfacts) ||
-    req.body.funfacts.length === 0
-  ) {
+  if (!req?.body?.funfacts) {
     return res.status(400).json({ message: "State fun facts value required" });
   }
+  if (!Array.isArray(req.body.funfacts)) {
+    return res
+      .status(400)
+      .json({ message: "State fun facts value must be an array" });
+  }
 
+  console.log(req?.body?.funfacts); //DEBUG
   let funfact;
   try {
     //check if there is already an array of funfacts for this state
     funfact = await Funfact.findOne({
       code: req.validatedState.code,
     }).exec();
+    console.log("Funfact.findOne", funfact); //DEBUG
   } catch (err) {
     console.error(err);
   }
@@ -97,7 +101,7 @@ const createFunfact = async (req, res) => {
     try {
       funfact = await Funfact.create({
         code: req.validatedState.code,
-        funfacts: [req.body.funfacts],
+        funfacts: [],
       });
     } catch (err) {
       console.error(err);
