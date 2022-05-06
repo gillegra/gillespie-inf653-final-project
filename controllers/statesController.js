@@ -141,7 +141,7 @@ const deleteFunfact = async (req, res) => {
     code: state.code,
   }).exec();
 
-  if (!funfact) {
+  if (!funfact?.funfacts?.length) {
     console.log({ message: "No Fun Fact found for " + state.state }); //DEBUG
     return res
       .status(400)
