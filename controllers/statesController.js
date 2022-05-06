@@ -21,7 +21,7 @@ const readState = async (req, res) => {
   const funfact = await Funfact.findOne({
     code: state.code,
   }).exec();
-  state.funfacts = funfact ? funfact.funfacts : [];
+  if (funfact) state.funfacts = funfact.funfacts;
   res.json(req.validatedState);
 };
 
@@ -127,25 +127,57 @@ const createFunfact = async (req, res) => {
   }
 };
 
-const updateFunfact = async (req, res) => {};
+const updateFunfact = async (req, res) => {
+  if (!req?.body?.index) {
+    return res
+      .status(400)
+      .json({ message: "State fun fact index value required" });
+  }
+  if (!req?.body?.funfact) {
+    return res.status(400).json({ message: "State fun fact value required" });
+  }
+
+  const state = req.validatedState;
+  const funfact = await Funfact.findOne({
+    code: state.code,
+  }).exec();
+
+  if (!funfact?.funfacts?.length) {
+    console.log({ message: "No Fun Facts found for " + state.state }); //DEBUG
+    return res
+      .status(400)
+      .json({ message: "No Fun Facts found for " + state.state });
+  }
+  if (!funfact.funfacts[req.body.index - 1]) {
+    console.log({
+      message: "No Fun Fact found at that index for " + state.state,
+    }); //DEBUG
+    return res
+      .status(400)
+      .json({ message: "No Fun Fact found at that index for " + state.state });
+  }
+  funfact.funfacts[req.body.index - 1] = req.body.funfact;
+  funfact.save();
+  res.json(funfact);
+};
 
 const deleteFunfact = async (req, res) => {
-  const state = req.validatedState;
   console.log(126, req?.body?.index); //DEBUG
   if (!req?.body?.index)
     return res
       .status(400)
       .json({ message: "State fun fact index value required" });
 
+  const state = req.validatedState;
   const funfact = await Funfact.findOne({
     code: state.code,
   }).exec();
 
   if (!funfact?.funfacts?.length) {
-    console.log({ message: "No Fun Fact found for " + state.state }); //DEBUG
+    console.log({ message: "No Fun Facts found for " + state.state }); //DEBUG
     return res
       .status(400)
-      .json({ message: "No Fun Fact found for " + state.state });
+      .json({ message: "No Fun Facts found for " + state.state });
   }
   if (!funfact.funfacts[req.body.index - 1]) {
     console.log({
