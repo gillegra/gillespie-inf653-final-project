@@ -12,6 +12,12 @@ const readAllStates = async (req, res) => {
       : null;
   const states = await State.find();
   if (!states) return res.status(204).json({ message: "No states found." });
+  // for (const state of states) {
+  //   const funfact = await Funfact.findOne({
+  //     code: state.code,
+  //   }).exec();
+  //   if (funfact?.funfacts?.length > 0) state.funfacts = funfact.funfacts;
+  // }
   res.json(states);
 };
 
@@ -21,7 +27,7 @@ const readState = async (req, res) => {
   const funfact = await Funfact.findOne({
     code: state.code,
   }).exec();
-  if (funfact) state.funfacts = funfact.funfacts;
+  if (funfact?.funfacts?.length > 0) state.funfacts = funfact.funfacts;
   res.json(req.validatedState);
 };
 
