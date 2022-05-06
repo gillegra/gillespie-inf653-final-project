@@ -69,12 +69,16 @@ const readFunfact = async (req, res) => {
     console.log("empty set", funfact, !funfact); //DEBUG
     return res
       .status(204)
-      .json({ message: "No Fun Facts found for " + state.name });
+      .json({ message: "No Fun Facts found for " + state.state });
   }
-  res.json({ funfact: funfact });
+  res.json({
+    funfact:
+      funfact.funfacts[Math.floor(Math.random() * funfact.funfacts.length)],
+  });
 };
 
 const createFunfact = async (req, res) => {
+  const state = req.validatedState;
   //validate the input
   if (!req?.body?.funfacts) {
     return res.status(400).json({ message: "State fun facts value required" });
@@ -90,7 +94,7 @@ const createFunfact = async (req, res) => {
   try {
     //check if there is already an array of funfacts for this state
     funfact = await Funfact.findOne({
-      code: req.validatedState.code,
+      code: state.code,
     }).exec();
     console.log("Funfact.findOne", funfact); //DEBUG
   } catch (err) {
@@ -100,7 +104,7 @@ const createFunfact = async (req, res) => {
   if (!funfact) {
     try {
       funfact = await Funfact.create({
-        code: req.validatedState.code,
+        code: state.code,
         funfacts: [],
       });
     } catch (err) {
