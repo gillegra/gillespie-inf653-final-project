@@ -17,6 +17,11 @@ const readAllStates = async (req, res) => {
 
 const readState = async (req, res) => {
   console.log("readState"); //DEBUG
+  const state = req.validatedState;
+  const funfact = await Funfact.findOne({
+    code: state.code,
+  }).exec();
+  state.funfacts = funfact ? funfact.funfacts : [];
   res.json(req.validatedState);
 };
 
