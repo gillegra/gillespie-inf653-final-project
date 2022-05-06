@@ -68,7 +68,7 @@ const readFunfact = async (req, res) => {
   if (!funfact) {
     console.log("empty set", funfact, !funfact); //DEBUG
     return res
-      .status(204)
+      .status(400)
       .json({ message: "No Fun Facts found for " + state.state });
   }
   res.json({
@@ -124,7 +124,38 @@ const createFunfact = async (req, res) => {
 
 const updateFunfact = async (req, res) => {};
 
-const deleteFunfact = async (req, res) => {};
+const deleteFunfact = async (req, res) => {
+  const state = req.validatedState;
+  console.log(126, req?.body?.index); //DEBUG
+  if (!req?.body?.index)
+    return res
+      .status(400)
+      .json({ message: "State fun fact index value required" });
+
+  const funfact = await Funfact.findOne({
+    code: state.code,
+  }).exec();
+
+  if (!funfact) {
+    console.log({ message: "No Fun Fact found for " + state.state }); //DEBUG
+    return res
+      .status(400)
+      .json({ message: "No Fun Fact found for " + state.state });
+  }
+  if (!funfact.funfacts[req.body.index - 1]) {
+    console.log({
+      message: "No Fun Fact found at that index for " + state.state,
+    }); //DEBUG
+    return res
+      .status(400)
+      .json({ message: "No Fun Fact found at that index for " + state.state });
+  }
+  funfact.funfacts = funfact.funfacts.filter(
+    (_, index) => index !== req.body.index - 1
+  );
+  funfact.save();
+  res.json(funfact);
+};
 
 module.exports = {
   readAllStates,
